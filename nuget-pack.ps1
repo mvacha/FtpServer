@@ -17,5 +17,5 @@ $nuspecFiles = get-childitem FubarDev.FtpServer*\*.nuspec
 ForEach ($nuspecFile in $nuspecFiles)
 {
 	$csFile = [System.IO.Path]::ChangeExtension($nuspecFile, ".csproj")
-	& nuget pack "$csFile" -Properties $properties -IncludeReferencedProjects
+	& nuget pack "$csFile" -Symbols -Properties $properties -IncludeReferencedProjects
 }
