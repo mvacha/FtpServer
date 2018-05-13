@@ -61,6 +61,11 @@ namespace FubarDev.FtpServer.FileSystem.DotNet
         /// </summary>
         public bool AllowNonEmptyDirectoryDelete { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether files will be deleted in case of a timeout during upload.
+        /// </summary>
+        public bool DeleteFileOnUploadTimeout { get; set; }
+
         /// <inheritdoc/>
         public Task<IUnixFileSystem> Create(string userId, bool isAnonymous)
         {
@@ -72,7 +77,7 @@ namespace FubarDev.FtpServer.FileSystem.DotNet
                 path = Path.Combine(path, userId);
             }
 
-            return Task.FromResult<IUnixFileSystem>(new DotNetFileSystem(path, AllowNonEmptyDirectoryDelete, _streamBufferSize));
+            return Task.FromResult<IUnixFileSystem>(new DotNetFileSystem(path, AllowNonEmptyDirectoryDelete, DeleteFileOnUploadTimeout, _streamBufferSize));
         }
     }
 }

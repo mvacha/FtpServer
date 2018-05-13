@@ -31,7 +31,7 @@ namespace FubarDev.FtpServer.FileSystem.DotNet
         /// <param name="rootPath">The path to use as root</param>
         /// <param name="allowNonEmptyDirectoryDelete">Allow deletion of non-empty directories?</param>
         public DotNetFileSystem(string rootPath, bool allowNonEmptyDirectoryDelete)
-            : this(rootPath, allowNonEmptyDirectoryDelete, DefaultStreamBufferSize)
+            : this(rootPath, allowNonEmptyDirectoryDelete, false, DefaultStreamBufferSize)
         {
         }
 
@@ -40,17 +40,22 @@ namespace FubarDev.FtpServer.FileSystem.DotNet
         /// </summary>
         /// <param name="rootPath">The path to use as root</param>
         /// <param name="allowNonEmptyDirectoryDelete">Allow deletion of non-empty directories?</param>
+        /// <param name="deleteFileOnUploadTimeout">Delete files when a timeout occurs during upload</param>
         /// <param name="streamBufferSize">Buffer size to be used in async IO methods</param>
-        public DotNetFileSystem(string rootPath, bool allowNonEmptyDirectoryDelete, int streamBufferSize)
+        public DotNetFileSystem(string rootPath, bool allowNonEmptyDirectoryDelete, bool deleteFileOnUploadTimeout , int streamBufferSize)
         {
             FileSystemEntryComparer = StringComparer.OrdinalIgnoreCase;
             Root = new DotNetDirectoryEntry(this, Directory.CreateDirectory(rootPath), true);
             SupportsNonEmptyDirectoryDelete = allowNonEmptyDirectoryDelete;
+            DeletesFilesOnUploadTimeout = deleteFileOnUploadTimeout;
             _streamBufferSize = streamBufferSize;
         }
 
         /// <inheritdoc/>
         public bool SupportsNonEmptyDirectoryDelete { get; }
+
+        /// <inheritdoc/>
+        public bool DeletesFilesOnUploadTimeout { get; }
 
         /// <inheritdoc/>
         public StringComparer FileSystemEntryComparer { get; }
@@ -171,9 +176,18 @@ namespace FubarDev.FtpServer.FileSystem.DotNet
         {
             var targetEntry = (DotNetDirectoryEntry)targetDirectory;
             var fileInfo = new FileInfo(Path.Combine(targetEntry.Info.FullName, fileName));
-            using (var output = fileInfo.Create())
+            try
             {
-                await data.CopyToAsync(output, _streamBufferSize, cancellationToken);
+                using (var output = fileInfo.Create())
+                {
+                    await data.CopyToAsync(output, _streamBufferSize, cancellationToken);
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                if (DeletesFilesOnUploadTimeout)
+                    fileInfo.Delete();
+                throw;
             }
             return null;
         }
