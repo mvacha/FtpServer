@@ -67,6 +67,7 @@ namespace FubarDev.FtpServer.CommandHandlers
                     else if (restartPosition.GetValueOrDefault() == 0 || fileInfo.Entry == null)
                     {
                         backgroundTransfer = await Data.FileSystem.CreateAsync(fileInfo.Directory, fileInfo.FileName, stream, cancellationToken);
+                        Connection.FileUploadedSuccessfuly();
                     }
                     else
                     {

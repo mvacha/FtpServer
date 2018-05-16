@@ -147,6 +147,11 @@ namespace FubarDev.FtpServer
         public int Port { get; }
 
         /// <summary>
+        /// Gets or sets the method that will be called whenever a new file is uploaded
+        /// </summary>
+        public EventHandler NewFileUpload { get; set; }
+
+        /// <summary>
         /// Gets or sets the default text encoding for textual data
         /// </summary>
         [NotNull]
@@ -335,6 +340,7 @@ namespace FubarDev.FtpServer
             Statistics.ActiveConnections += 1;
             Statistics.TotalConnections += 1;
             connection.Closed += ConnectionOnClosed;
+            connection.NewFileUploaded += NewFileUpload;
             _connections.Add(connection);
             connection.Log = LogManager?.CreateLog(connection);
             OnConfigureConnection(connection);
