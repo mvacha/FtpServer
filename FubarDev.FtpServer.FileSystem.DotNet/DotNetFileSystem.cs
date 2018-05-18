@@ -183,11 +183,11 @@ namespace FubarDev.FtpServer.FileSystem.DotNet
                     await data.CopyToAsync(output, _streamBufferSize, cancellationToken);
                 }
             }
-            catch (Exception e)
+            catch (OperationCanceledException)
             {
                 if (DeletesFilesOnUploadTimeout)
                     fileInfo.Delete();
-                throw e;
+                throw;
             }
             return null;
         }
