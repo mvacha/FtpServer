@@ -151,9 +151,10 @@ namespace FubarDev.FtpServer
         /// <summary>
         /// Invokes the method that is to be called after a file has been successfuly uploaded
         /// </summary>
-        public void FileUploadedSuccessfuly()
+        /// <param name="fileName">The filename for the file upload event</param>
+        public void FileUploadedSuccessfuly(string fileName)
         {
-            NewFileUploaded?.Invoke(null, new ConnectionEventArgs(this));
+            NewFileUploaded?.Invoke(null, new FileUploadEventArgs(this, fileName));
         }
 
         /// <summary>
