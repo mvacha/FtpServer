@@ -14,7 +14,7 @@ namespace FubarDev.FtpServer
         /// </summary>
         /// <param name="connection">The connection of the event</param>
         /// <param name="fileName">The filename of the event</param>
-        public FileUploadEventArgs([NotNull] FtpConnection connection ,[NotNull] string fileName)
+        public FileUploadEventArgs([NotNull] FtpConnection connection, [NotNull] string fileName)
         {
             Connection = connection;
             FileName = fileName;
