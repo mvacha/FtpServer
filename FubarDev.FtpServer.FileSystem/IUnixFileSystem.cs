@@ -31,6 +31,11 @@ namespace FubarDev.FtpServer.FileSystem
         bool SupportsNonEmptyDirectoryDelete { get; }
 
         /// <summary>
+        /// Gets a value indicating whether files will be deleted in case of a timeout during upload.
+        /// </summary>
+        bool DeletesFilesOnUploadTimeout { get; }
+
+        /// <summary>
         /// Gets a string comparer for file system entry names
         /// </summary>
         /// <remarks>
