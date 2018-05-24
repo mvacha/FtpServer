@@ -68,6 +68,11 @@ namespace FubarDev.FtpServer
         public event EventHandler Closed;
 
         /// <summary>
+        /// Gets or sets the event handler that is triggered when a new file is uploaded.
+        /// </summary>
+        public event EventHandler NewFileUploaded;
+
+        /// <summary>
         /// Gets the dictionary of all known command handlers
         /// </summary>
         [NotNull]
@@ -141,6 +146,15 @@ namespace FubarDev.FtpServer
         {
             _cancellationTokenSource.Cancel(true);
             _closed = true;
+        }
+
+        /// <summary>
+        /// Invokes the method that is to be called after a file has been successfuly uploaded
+        /// </summary>
+        /// <param name="fileName">The filename for the file upload event</param>
+        public void FileUploadedSuccessfuly(string fileName)
+        {
+            NewFileUploaded?.Invoke(null, new FileUploadEventArgs(RemoteAddress.IpAddress, fileName));
         }
 
         /// <summary>

@@ -58,6 +58,7 @@
     <Compile Include="CommandHandlers\MfctCommandHandler.cs" />
     <Compile Include="CommandHandlers\MffCommandHandler.cs" />
     <Compile Include="CommandHandlers\MfmtCommandHandler.cs" />
+    <Compile Include="FileUploadEventArgs.cs" />
     <Compile Include="FtpCommandHandlerBase.cs" />
     <Compile Include="CommandExtensions\FtpCommandHandlerExtension.cs" />
     <Compile Include="FtpCommandHandlerProcessDelegate.cs" />
