@@ -12,11 +12,11 @@ namespace FubarDev.FtpServer
         /// <summary>
         /// Initializes a new instance of the <see cref="FileUploadEventArgs"/> class.
         /// </summary>
-        /// <param name="connection">The connection of the event</param>
+        /// <param name="ipAddress">The ip adress of the current connection</param>
         /// <param name="fileName">The filename of the event</param>
-        public FileUploadEventArgs([NotNull] FtpConnection connection, [NotNull] string fileName)
+        public FileUploadEventArgs([NotNull] string ipAddress, [NotNull] string fileName)
         {
-            Connection = connection;
+            IpAddress = ipAddress;
             FileName = fileName;
         }
 
@@ -24,7 +24,7 @@ namespace FubarDev.FtpServer
         /// Gets the connection for this event
         /// </summary>
         [NotNull]
-        public FtpConnection Connection { get; }
+        public string IpAddress { get; }
 
         /// <summary>
         /// Gets the filename for this event

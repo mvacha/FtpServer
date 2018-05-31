@@ -154,7 +154,7 @@ namespace FubarDev.FtpServer
         /// <param name="fileName">The filename for the file upload event</param>
         public void FileUploadedSuccessfuly(string fileName)
         {
-            NewFileUploaded?.Invoke(null, new FileUploadEventArgs(this, fileName));
+            NewFileUploaded?.Invoke(null, new FileUploadEventArgs(RemoteAddress.IpAddress, fileName));
         }
 
         /// <summary>
