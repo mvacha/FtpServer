@@ -6,6 +6,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -67,7 +68,8 @@ namespace FubarDev.FtpServer.CommandHandlers
                     else if (restartPosition.GetValueOrDefault() == 0 || fileInfo.Entry == null)
                     {
                         backgroundTransfer = await Data.FileSystem.CreateAsync(fileInfo.Directory, fileInfo.FileName, stream, cancellationToken);
-                        Connection.FileUploadedSuccessfuly(fileInfo.FileName);
+                        var path = string.Join("/", currentPath.Select(i => i.Name));
+                        Connection.FileUploadedSuccessfuly(path + '/' + fileInfo.FileName);
                     }
                     else
                     {
