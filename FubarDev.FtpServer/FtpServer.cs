@@ -164,6 +164,11 @@ namespace FubarDev.FtpServer
         public EventHandler NewFileUpload { get; set; }
 
         /// <summary>
+        /// Gets or sets the method that will be called whenever a new file is uploaded
+        /// </summary>
+        public Func<string, bool> FileNameValidation { get; set; }
+
+        /// <summary>
         /// Gets or sets the default text encoding for textual data
         /// </summary>
         [NotNull]
@@ -351,6 +356,7 @@ namespace FubarDev.FtpServer
             var connection = new FtpConnection(this, args.SocketClient, DefaultEncoding);
             Statistics.ActiveConnections += 1;
             Statistics.TotalConnections += 1;
+            connection.FileNameValidation = FileNameValidation;
             connection.Closed += ConnectionOnClosed;
             connection.NewFileUploaded += NewFileUpload;
             _connections.Add(connection);

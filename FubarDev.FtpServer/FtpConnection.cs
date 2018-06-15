@@ -73,6 +73,11 @@ namespace FubarDev.FtpServer
         public event EventHandler NewFileUploaded;
 
         /// <summary>
+        ///  Gets or sets the function that determines whether we accept a file or not
+        /// </summary>
+        public Func<string, bool> FileNameValidation { get; set; }
+
+        /// <summary>
         /// Gets the dictionary of all known command handlers
         /// </summary>
         [NotNull]
