@@ -6,7 +6,6 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -48,7 +47,7 @@ namespace FubarDev.FtpServer.CommandHandlers
             var fileInfo = await Data.FileSystem.SearchFileAsync(currentPath, fileName, cancellationToken);
             if (fileInfo == null)
                 return new FtpResponse(550, "Not a valid directory.");
-            if (fileInfo.FileName == null)
+            if (fileInfo.FileName == null || (Connection.FileNameValidation != null && !Connection.FileNameValidation(fileInfo.FileName)))
                 return new FtpResponse(553, "File name not allowed.");
 
             var doReplace = restartPosition.GetValueOrDefault() == 0 && fileInfo.Entry != null;
@@ -68,8 +67,8 @@ namespace FubarDev.FtpServer.CommandHandlers
                     else if (restartPosition.GetValueOrDefault() == 0 || fileInfo.Entry == null)
                     {
                         backgroundTransfer = await Data.FileSystem.CreateAsync(fileInfo.Directory, fileInfo.FileName, stream, cancellationToken);
-                        var path = string.Join("/", currentPath.Select(i => i.Name));
-                        Connection.FileUploadedSuccessfuly(path + '/' + fileInfo.FileName);
+                        var path = currentPath.ToDisplayString();
+                        Connection.FileUploadedSuccessfuly(path.TrimStart('/') + '/' + fileInfo.FileName);
                     }
                     else
                     {
